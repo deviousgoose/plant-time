@@ -1,40 +1,45 @@
 #include <Arduino.h>
 
-#define YLW_LED 2
-#define GRN_LED 1
-#define BUZZ_PIN 4
+#define YLW_LED (2)
+#define GRN_LED (1)
+#define BUZZ_PIN (4)
+#define MOISTURE_PIN (3)
 
-void setup()
-{
-  pinMode(YLW_LED, OUTPUT);
+int readMoisture() { return analogRead(MOISTURE_PIN); }
 
-  pinMode(GRN_LED, OUTPUT);
+void setLedState(bool isYellowOn, bool isGreenOn) {
+  digitalWrite(YLW_LED, isYellowOn);
+  digitalWrite(GRN_LED, isGreenOn);
+}
 
-  pinMode(BUZZ_PIN, OUTPUT);
-
+void buzzBeep() {
   digitalWrite(BUZZ_PIN, HIGH);
-
   delay(10);
-
   digitalWrite(BUZZ_PIN, LOW);
 }
 
-void loop()
-{
+// MAIN PROGRAM
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(YLW_LED, OUTPUT);
+  pinMode(GRN_LED, OUTPUT);
+  pinMode(BUZZ_PIN, OUTPUT);
+
+  buzzBeep();
+}
+
+void loop() {
   // Turn LED ON
   // Wait
   // Turn LED OFF
   // Wait
 
-  digitalWrite(YLW_LED, HIGH);
-
-  digitalWrite(GRN_LED, LOW);
-
+  setLedState(true, false);
+  Serial.println(readMoisture());
   delay(1000);
 
-  digitalWrite(YLW_LED, LOW);
-
-  digitalWrite(GRN_LED, HIGH);
-
+  setLedState(false, true);
   delay(1000);
 }
